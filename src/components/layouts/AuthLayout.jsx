@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router";
-import Input from "../ui/Input";
+
 
 export default function AuthLayout() {
   return (

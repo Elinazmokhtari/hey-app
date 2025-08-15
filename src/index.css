@@ -1,4 +1,21 @@
 @import "tailwindcss";
 body{
     background-color: #fee685;
+   
+}
+
+.active {
+    background-color: theme(--color-amber-50);
+    color:  theme(--color-amber-500)
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scroll {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }

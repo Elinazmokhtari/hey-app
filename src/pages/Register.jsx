@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router";
+import { API } from "../utils/path";
 
 const schema = yup
   .object({
@@ -34,13 +35,13 @@ function Register() {
   let navigate = useNavigate();
 
   const onSubmit = (data) => {
-    fetch("https://hey.mahdisharifi.dev/api/auth/register", {
+    fetch(API.register, {
       method: "post",
       body: JSON.stringify({
         email: data.email,
         name: data.name,
         password: data.password,
-       password_confirmation: data.passwordConfirmation,
+        password_confirmation: data.passwordConfirmation,
       }),
       headers: {
         "Content-Type": "application/json",

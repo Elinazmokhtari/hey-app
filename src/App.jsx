@@ -7,6 +7,9 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import userSlice from "./redux/slices/userSlice";
 import { Navigate } from "react-router";
+import MainLayout from "./components/layouts/MainLayout";
+import Profile from "./pages/Profile";
+import CreateTweet from "./pages/CreateTweet";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,16 +44,6 @@ function App() {
     }
   }, []);
 
-  //   <Routes>
-  //     <Route element={<AuthLayout />}>
-  //       <Route path="/login" element={<Login />} />
-  //       <Route path="/register" element={<Register />} />
-  //     </Route>
-  //     <Route element={<Home />} path="/" />
-  //   </Routes>
-
-  // );
-
   if (user === undefined) {
     return <p>loading</p>;
   }
@@ -71,7 +64,11 @@ function App() {
     return (
       <Routes>
         <Route path="*" element={<Navigate to={"/"} />} />
-        <Route path="/" element={<Home />} />
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+           <Route path="/profile" element={ <Profile/>} />
+           <Route path="/createtweet" element={ <CreateTweet/>} />
+        </Route>
       </Routes>
     );
   }
