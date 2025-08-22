@@ -36,6 +36,7 @@ function Login() {
             headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json",
+                authorization: `Bearer ${data.token}`,
             },
         })
             .then((res) => {

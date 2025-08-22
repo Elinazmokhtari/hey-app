@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import userSlice from "../redux/slices/userSlice";
-import { useSelector } from "react-redux";
 import SideBar from "../components/SideBar";
 import TweetsCard from "../components/TweetsCard";
 import Button from "../components/ui/Button";
@@ -47,7 +45,9 @@ function Home() {
             </div>
             <div className="flex-1 flex flex-col overflow-auto no-scroll">
                 {tweets.map((tweet, index) => {
-                    return <TweetsCard className="" tweet={tweet} />;
+                    return (
+                        <TweetsCard key={index} className="" tweet={tweet} />
+                    );
                 })}
             </div>
         </div>
