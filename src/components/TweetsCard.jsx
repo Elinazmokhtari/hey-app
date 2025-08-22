@@ -1,5 +1,5 @@
 import moment from "moment";
-import React from "react";
+import React, { useState } from "react";
 import userIcon from "../assets/img/user.png";
 import {
     ChatBubbleBottomCenterTextIcon,
@@ -13,8 +13,10 @@ import { useSelector } from "react-redux";
 export default function TweetsCard(props) {
     const user = useSelector((state) => state.userSlice.user);
     const token = localStorage.getItem("hey-token");
+    const [loading, setLoading] = useState(false);
 
     function handleDeleteTweet() {
+        setLoading(true);
         fetch(`https://hey.mahdisharifi.dev/api/tweets/${props.tweet.id}`, {
             method: "delete",
             headers: {
@@ -22,14 +24,18 @@ export default function TweetsCard(props) {
                 Accept: "application/json",
                 authorization: `Bearer ${token}`,
             },
-        }).then((res) => {
-            if (res.ok) {
-                props.onTweetDelete(props.tweet.id);
-                return res.json();
-            } else {
-                return console.log("error in tweet card ");
-            }
-        });
+        })
+            .then((res) => {
+                if (res.ok) {
+                    props.onTweetDelete(props.tweet.id);
+                    return res.json();
+                } else {
+                    return console.log("error in tweet card ");
+                }
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }
 
     return (
@@ -51,11 +57,15 @@ export default function TweetsCard(props) {
                                 {user.id === props.tweet.user.id ? (
                                     <div className="flex gap-1">
                                         <TrashIcon
-                                            className="size-5 text-red-500 cursor-pointer"
+                                            className={`size-5 text-red-500 cursor-pointer ${
+                                                loading ? "opacity-50" : ""
+                                            }`}
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 e.stopPropagation();
-                                                handleDeleteTweet();
+                                                if (!loading) {
+                                                    handleDeleteTweet();
+                                                }
                                             }}
                                         />
                                         <PencilSquareIcon className="size-5 text-gray-500" />

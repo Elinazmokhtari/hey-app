@@ -16,7 +16,7 @@ export default function SingleTweet() {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(schema),
     });
@@ -53,7 +53,7 @@ export default function SingleTweet() {
     }
 
     const onSubmit = (data) => {
-        fetch("https://hey.mahdisharifi.dev/api/tweets", {
+        return fetch("https://hey.mahdisharifi.dev/api/tweets", {
             method: "post",
             body: JSON.stringify({
                 tweet_id: tweet.id,
@@ -105,7 +105,11 @@ export default function SingleTweet() {
                                 {...register("content")}
                             ></textarea>
                             {errors.conetnt?.message}
-                            <Button type="submit" lable={"Create Twwet"} />
+                            <Button
+                                type="submit"
+                                lable={"Create Twwet"}
+                                disabled={isSubmitting}
+                            />
                         </div>
                     </form>
 

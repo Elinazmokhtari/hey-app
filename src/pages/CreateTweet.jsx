@@ -19,7 +19,7 @@ export default function CreateTweet() {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(schema),
     });
@@ -48,7 +48,7 @@ export default function CreateTweet() {
     }, []);
 
     const onSubmit = (data) => {
-        fetch("https://hey.mahdisharifi.dev/api/tweets", {
+        return fetch("https://hey.mahdisharifi.dev/api/tweets", {
             method: "Post",
             body: JSON.stringify({
                 category: data.category,
@@ -63,7 +63,7 @@ export default function CreateTweet() {
         })
             .then((res) => {
                 if (res.ok) {
-                    navigate("/home");
+                    navigate("/");
                     return res.json();
                 } else {
                     console.log("err in create tweet response");
@@ -84,9 +84,19 @@ export default function CreateTweet() {
             </div>
             <form action="" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-4">
-                    <div className="flex flex-col gap-2">
-                        <label htmlFor="category">category</label>
-                        <select name="" id="" {...register("category")}>
+                    <div className="flex flex-col gap-2 ">
+                        <label
+                            className="text-[14px] text-[#6b7280]"
+                            htmlFor="category"
+                        >
+                            Category
+                        </label>
+                        <select
+                            className="w-full p-2 border border-gray-300 rounded-lg "
+                            name=""
+                            id=""
+                            {...register("category")}
+                        >
                             <option value={""}>choose...</option>
                             {category.map((item, index) => {
                                 return (
@@ -101,22 +111,33 @@ export default function CreateTweet() {
                             })}
                         </select>
                         {errors.category?.message ? (
-                            <span>{errors.category.message}</span>
+                            <span className="text-red-500">
+                                {errors.category.message}
+                            </span>
                         ) : null}
                     </div>
                     <div className=" flex flex-col gap-2">
-                        <label>content</label>
+                        <label className="text-[14px] text-[#6b7280]">
+                            Content
+                        </label>
                         <textarea
+                            className="w-full p-4 border border-gray-300 rounded-lg "
                             name=""
                             id=""
                             rows={5}
                             {...register("content")}
                         ></textarea>
                         {errors.content?.message ? (
-                            <span>{errors.content.message}</span>
+                            <span className="text-red-500">
+                                {errors.content.message}
+                            </span>
                         ) : null}
                     </div>
-                    <Button type="submit" lable={"Create tweet"} />
+                    <Button
+                        type="submit"
+                        lable={"Create tweet"}
+                        disabled={isSubmitting}
+                    />
                 </div>
             </form>
         </>

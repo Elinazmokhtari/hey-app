@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
 
 function Button(props) {
-  return (
-    <button {...props}  className='bg-amber-400 p-2 rounded-[8px] text-center text-white  w-full'>{props.lable}</button>
-  )
+    return (
+        <button
+            className="bg-amber-400 p-2 rounded-[8px] text-center text-white  w-full disabled:bg-amber-200"
+            {...props}
+        >
+            {props.lable}
+        </button>
+    );
 }
 
-export default Button
+export default Button;
