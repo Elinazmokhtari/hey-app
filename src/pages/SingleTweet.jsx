@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import TweetsCard from "../components/TweetsCard";
 import Button from "../components/ui/Button";
 import { useForm } from "react-hook-form";
@@ -9,7 +9,7 @@ import * as yup from "yup";
 export default function SingleTweet() {
     const schema = yup
         .object({
-            conetnt: yup.string().required(),
+            content: yup.string().required(),
         })
         .required();
 
@@ -24,6 +24,7 @@ export default function SingleTweet() {
     const param = useParams();
     const token = localStorage.getItem("hey-token");
     const [tweet, setTweet] = useState(undefined);
+    const navigate = useNavigate();
 
     useEffect(() => {
         handleGetTweet();
@@ -83,7 +84,13 @@ export default function SingleTweet() {
             <p className="text-2xl font-bold leading-6 mb-4">Tweet</p>
             {tweet ? (
                 <div className="">
-                    <TweetsCard tweet={tweet} />
+                    <TweetsCard
+                        tweet={tweet}
+                        onTweetDelete={(id) => {
+                            console.log(id, "single");
+                            navigate("/");
+                        }}
+                    />
                     <form action="" onSubmit={handleSubmit(onSubmit)}>
                         <h1 className="text-2xl font-bold leading-6 mb-4">
                             Reply
@@ -108,7 +115,16 @@ export default function SingleTweet() {
                     {tweet.replies.length === 0
                         ? "no replies"
                         : tweet.replies.map((item, index) => {
-                              return <TweetsCard key={index} tweet={item} />;
+                              return (
+                                  <TweetsCard
+                                      key={index}
+                                      tweet={item}
+                                      onTweetDelete={(id) => {
+                                          console.log(id, "reply");
+                                          handleGetTweet();
+                                      }}
+                                  />
+                              );
                           })}
                 </div>
             ) : (

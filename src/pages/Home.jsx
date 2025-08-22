@@ -6,10 +6,10 @@ import { PencilIcon } from "@heroicons/react/24/outline";
 import { NavLink } from "react-router";
 
 function Home() {
-    const [tweets, setTweets] = useState([]);
+    const [tweets, setTweets] = useState(undefined);
     const token = localStorage.getItem("hey-token");
 
-    useEffect(() => {
+    function handleGetTweetList() {
         fetch("https://hey.mahdisharifi.dev/api/tweets", {
             method: "get",
             headers: {
@@ -32,6 +32,10 @@ function Home() {
             .catch((err) => {
                 console.log(err);
             });
+    }
+
+    useEffect(() => {
+        handleGetTweetList();
     }, []);
     return (
         <div className="h-full w-full flex flex-col overflow-hidden">
@@ -44,11 +48,21 @@ function Home() {
                 </NavLink>
             </div>
             <div className="flex-1 flex flex-col overflow-auto no-scroll">
-                {tweets.map((tweet, index) => {
-                    return (
-                        <TweetsCard key={index} className="" tweet={tweet} />
-                    );
-                })}
+                {tweets
+                    ? tweets.map((tweet, index) => {
+                          return (
+                              <TweetsCard
+                                  key={index}
+                                  className=""
+                                  tweet={tweet}
+                                  onTweetDelete={(id) => {
+                                      console.log(id, "home page");
+                                      handleGetTweetList();
+                                  }}
+                              />
+                          );
+                      })
+                    : "loading"}
             </div>
         </div>
     );
