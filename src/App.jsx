@@ -11,6 +11,7 @@ import MainLayout from "./components/layouts/MainLayout";
 import Profile from "./pages/Profile";
 import CreateTweet from "./pages/CreateTweet";
 import SingleTweet from "./pages/SingleTweet";
+import EditTweet from "./pages/EditTweet";
 
 function App() {
     const dispatch = useDispatch();
@@ -70,6 +71,7 @@ function App() {
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/createtweet" element={<CreateTweet />} />
                     <Route path="/tweet/:id" element={<SingleTweet />} />
+                    <Route path="/edittweet/:id" element={<EditTweet />} />
                 </Route>
             </Routes>
         );

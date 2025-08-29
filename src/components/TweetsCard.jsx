@@ -7,13 +7,18 @@ import {
     PencilSquareIcon,
     TrashIcon,
 } from "@heroicons/react/24/outline";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 
 export default function TweetsCard(props) {
     const user = useSelector((state) => state.userSlice.user);
     const token = localStorage.getItem("hey-token");
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const [likeStatus, setLikeStatus] = useState(props.tweet.liked);
+    const [likeCount, setLikeCount] = useState(
+        parseInt(props.tweet.likes_count)
+    );
 
     function handleDeleteTweet() {
         setLoading(true);
@@ -36,6 +41,64 @@ export default function TweetsCard(props) {
             .finally(() => {
                 setLoading(false);
             });
+    }
+
+    function handleLike() {
+        setLikeStatus(true);
+        setLikeCount(likeCount + 1);
+        setLoading(true);
+
+        return fetch(
+            `https://hey.mahdisharifi.dev/api/tweets/like/${props.tweet.id}`,
+            {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+            }
+        )
+            .then((res) => {
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    console.log("res err in like tweeet");
+                }
+            })
+            .then((data) => {
+                console.log(data);
+            })
+
+            .finally(() => setLoading(false));
+    }
+
+    function handleDisLike() {
+        setLikeStatus(false);
+        setLikeCount(likeCount - 1);
+        setLoading(true);
+
+        return fetch(
+            `https://hey.mahdisharifi.dev/api/tweets/dislike/${props.tweet.id}`,
+            {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+            }
+        )
+            .then((res) => {
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    console.log("res err in dislike tweet");
+                }
+            })
+            .then((data) => console.log(data))
+
+            .finally(() => setLoading(false));
     }
 
     return (
@@ -68,7 +131,16 @@ export default function TweetsCard(props) {
                                                 }
                                             }}
                                         />
-                                        <PencilSquareIcon className="size-5 text-gray-500" />
+                                        <PencilSquareIcon
+                                            className="size-5 text-gray-500"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                navigate(
+                                                    `/edittweet/${props.tweet.id}`
+                                                );
+                                            }}
+                                        />
                                     </div>
                                 ) : (
                                     ""
@@ -77,9 +149,32 @@ export default function TweetsCard(props) {
                         </div>
                     </div>
                     <div className="flex  gap-2 h-full ">
-                        <div className="size-8 flex items-center gap-1  ">
-                            <HeartIcon />
-                            <span>{props.tweet.likes_count}</span>
+                        <div
+                            className="size-8 flex items-center gap-1"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if (loading === false) {
+                                    if (likeStatus === false) {
+                                        handleLike();
+                                    } else {
+                                        handleDisLike();
+                                    }
+                                }
+                            }}
+                        >
+                            <HeartIcon
+                                className={
+                                    likeStatus === true ? `text-red-500` : ""
+                                }
+                            />
+                            <span
+                                className={
+                                    likeStatus === true ? "text-red-500" : ""
+                                }
+                            >
+                                {likeCount}
+                            </span>
                         </div>
                         <div className="size-8 flex items-center gap-1">
                             <ChatBubbleBottomCenterTextIcon />
