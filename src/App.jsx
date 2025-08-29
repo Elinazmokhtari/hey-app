@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router";
 import AuthLayout from "./components/layouts/AuthLayout";
-import Login from "./pages/login";
+import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import { useEffect } from "react";
