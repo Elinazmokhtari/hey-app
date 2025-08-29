@@ -9,6 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
+import { API } from "../utils/path";
 
 export default function TweetsCard(props) {
     const user = useSelector((state) => state.userSlice.user);
@@ -22,7 +23,7 @@ export default function TweetsCard(props) {
 
     function handleDeleteTweet() {
         setLoading(true);
-        fetch(`https://hey.mahdisharifi.dev/api/tweets/${props.tweet.id}`, {
+        fetch(API.deletetweet(props.tweet.id), {
             method: "delete",
             headers: {
                 "Content-Type": "application/json",
@@ -48,17 +49,14 @@ export default function TweetsCard(props) {
         setLikeCount(likeCount + 1);
         setLoading(true);
 
-        return fetch(
-            `https://hey.mahdisharifi.dev/api/tweets/like/${props.tweet.id}`,
-            {
-                method: "post",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                    authorization: `Bearer ${token}`,
-                },
-            }
-        )
+        return fetch(API.liketweet(props.tweet.id), {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                authorization: `Bearer ${token}`,
+            },
+        })
             .then((res) => {
                 if (res.ok) {
                     return res.json();
@@ -78,17 +76,14 @@ export default function TweetsCard(props) {
         setLikeCount(likeCount - 1);
         setLoading(true);
 
-        return fetch(
-            `https://hey.mahdisharifi.dev/api/tweets/dislike/${props.tweet.id}`,
-            {
-                method: "post",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                    authorization: `Bearer ${token}`,
-                },
-            }
-        )
+        return fetch(API.disliketweet(props.tweet.id), {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                authorization: `Bearer ${token}`,
+            },
+        })
             .then((res) => {
                 if (res.ok) {
                     return res.json();

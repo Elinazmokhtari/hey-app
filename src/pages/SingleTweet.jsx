@@ -5,6 +5,7 @@ import Button from "../components/ui/Button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { API } from "../utils/path";
 
 export default function SingleTweet() {
     const schema = yup
@@ -31,7 +32,7 @@ export default function SingleTweet() {
     }, []);
 
     function handleGetTweet() {
-        fetch(`https://hey.mahdisharifi.dev/api/tweets/${param.id}`, {
+        fetch(API.singletweet(param.id), {
             method: "get",
             headers: {
                 "Content-Type": "application/json",
@@ -80,10 +81,10 @@ export default function SingleTweet() {
             });
     };
     return (
-        <div>
+        <>
             <p className="text-2xl font-bold leading-6 mb-4">Tweet</p>
             {tweet ? (
-                <div className="">
+                <div className="overflow-auto no-scroll">
                     <TweetsCard
                         tweet={tweet}
                         onTweetDelete={(id) => {
@@ -134,6 +135,6 @@ export default function SingleTweet() {
             ) : (
                 "loading"
             )}
-        </div>
+        </>
     );
 }

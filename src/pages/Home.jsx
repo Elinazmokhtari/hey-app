@@ -4,13 +4,14 @@ import TweetsCard from "../components/TweetsCard";
 import Button from "../components/ui/Button";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { NavLink } from "react-router";
+import { API } from "../utils/path";
 
 function Home() {
     const [tweets, setTweets] = useState(undefined);
     const token = localStorage.getItem("hey-token");
 
     function handleGetTweetList() {
-        fetch("https://hey.mahdisharifi.dev/api/tweets", {
+        fetch(API.tweets, {
             method: "get",
             headers: {
                 "Content-Type": "application/json",

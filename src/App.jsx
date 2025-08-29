@@ -47,7 +47,7 @@ function App() {
     }, []);
 
     if (user === undefined) {
-        return <p>loading</p>;
+        return <p className="p-4">loading</p>;
     }
 
     if (user === null) {

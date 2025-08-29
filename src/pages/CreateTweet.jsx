@@ -4,6 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../components/ui/Button";
 import { useNavigate } from "react-router";
+import { API } from "../utils/path";
+import { getApiHeaders } from "../utils/helper";
 
 const schema = yup
     .object({
@@ -15,7 +17,7 @@ const schema = yup
 export default function CreateTweet() {
     const navigate = useNavigate();
     const [category, setCategorise] = useState([]);
-    const token = localStorage.getItem("hey-token");
+
     const {
         register,
         handleSubmit,
@@ -25,13 +27,9 @@ export default function CreateTweet() {
     });
 
     useEffect(() => {
-        fetch("https://hey.mahdisharifi.dev/api/tweets/categories", {
+        fetch(API.categories, {
             method: "get",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-                authorization: `Bearer ${token}`,
-            },
+            headers: getApiHeaders(),
         })
             .then((res) => {
                 if (res.ok) {
@@ -48,18 +46,14 @@ export default function CreateTweet() {
     }, []);
 
     const onSubmit = (data) => {
-        return fetch("https://hey.mahdisharifi.dev/api/tweets", {
+        return fetch(API.createtweet, {
             method: "Post",
             body: JSON.stringify({
                 category: data.category,
                 content: data.content,
             }),
 
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-                authorization: `Bearer ${token}`,
-            },
+            headers: getApiHeaders(),
         })
             .then((res) => {
                 if (res.ok) {

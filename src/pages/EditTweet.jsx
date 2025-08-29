@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../components/ui/Button";
 import { useNavigate, useParams } from "react-router";
+import { API } from "../utils/path";
 
 const schema = yup
     .object({
@@ -25,17 +26,14 @@ export default function EditTweet() {
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: async () => {
-            const response = await fetch(
-                `https://hey.mahdisharifi.dev/api/tweets/${params.id}`,
-                {
-                    method: "get",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                        authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const response = await fetch(API.singletweet(params.id), {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+            });
             const data = await response.json();
             setLoading(false);
             return {
@@ -46,7 +44,7 @@ export default function EditTweet() {
     });
 
     useEffect(() => {
-        fetch("https://hey.mahdisharifi.dev/api/tweets/categories", {
+        fetch(API.categories, {
             method: "get",
             headers: {
                 "Content-Type": "application/json",
@@ -69,7 +67,7 @@ export default function EditTweet() {
     }, []);
 
     const onSubmit = (data) => {
-        return fetch(`https://hey.mahdisharifi.dev/api/tweets/${params.id}`, {
+        return fetch(API.edittweet(params.id), {
             method: "PATCH",
             body: JSON.stringify({
                 category: data.category,
@@ -101,7 +99,7 @@ export default function EditTweet() {
     return (
         <>
             <div className="text-2xl font-bold leading-6 mb-4">
-                Edit Your Tweet {params.id}
+                Edit Your Tweet
             </div>
             {loading ? (
                 "loading"
