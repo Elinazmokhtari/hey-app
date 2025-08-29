@@ -83,7 +83,7 @@ function Register() {
                     <div className="mb-4">
                         <Input
                             lable={"Email"}
-                            placeholder={"Enter your emal"}
+                            placeholder={"Enter your email"}
                             {...register("email")}
                             error={errors.email?.message}
                         />
